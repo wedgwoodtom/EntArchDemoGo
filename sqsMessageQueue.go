@@ -9,7 +9,6 @@ import (
 )
 
 type SqsMessageQueue struct {
-	session  session.Session
 	service  *sqs.SQS
 	queueUrl string
 }
@@ -40,7 +39,7 @@ func NewQueue(region string, queueName string) SqsMessageQueue {
 
 	queueUrl := resultURL.QueueUrl
 
-	return SqsMessageQueue{session: *session, service: service, queueUrl: *queueUrl}
+	return SqsMessageQueue{service: service, queueUrl: *queueUrl}
 
 }
 

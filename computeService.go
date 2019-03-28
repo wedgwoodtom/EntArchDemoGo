@@ -30,6 +30,9 @@ func (cs *ComputeService) processNotificationMessages() {
 
 	for _, message := range messages {
 		fmt.Println("Computing for Message: ", message.MessageId)
+
+		// Store to Dynamo
+
 		cs.notificationQueue.deleteItem(message.ReceiptHandle)
 	}
 

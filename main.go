@@ -8,6 +8,9 @@ import (
 )
 
 func main() {
+
+	// Dyn
+
 	// Start Notification Listener and Compute Service
 	notificationQueue := NewQueue("us-west-2", "media-notifications")
 

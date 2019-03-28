@@ -18,3 +18,6 @@ func Schedule(what func(), delay time.Duration) chan bool {
 
 	return stop
 }
+
+// Look at this
+//https://gobyexample.com/tickers
