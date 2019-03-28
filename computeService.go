@@ -19,7 +19,7 @@ func (cs *ComputeService) Start() {
 	process := func() {
 		cs.processNotificationMessages()
 	}
-	schedule(process, 1*time.Second)
+	Schedule(process, 1*time.Second)
 }
 
 func (cs *ComputeService) processNotificationMessages() {

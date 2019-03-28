@@ -17,7 +17,7 @@ func (n *NotificationListener) Start() {
 	process := func() {
 		n.processNotification()
 	}
-	schedule(process, 100*time.Millisecond)
+	Schedule(process, 1*time.Second)
 	n.listening = true
 }
 
@@ -33,12 +33,3 @@ func (n *NotificationListener) processNotification() {
 
 	n.NotificationQueue.PushItem()
 }
-
-//func init() {
-//	fileName := "media-notification.txt"
-//	dummyMediaNotification, err := ioutil.ReadFile(fileName)
-//	if (err != nil) {
-//		fmt.Println("File not found", fileName)
-//	}
-//	fmt.Println(string(dummyMediaNotification))
-//}

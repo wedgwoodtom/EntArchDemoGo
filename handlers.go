@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -12,8 +10,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fmt.Fprintln(w, "vars:", vars)
+	fmt.Fprintln(w, "Hello There")
 
 	//todoId := vars["todoId"]
 	//fmt.Fprintln(w, "Todo show:", todoId)
