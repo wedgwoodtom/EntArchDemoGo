@@ -26,11 +26,6 @@ func schedule(what func(), delay time.Duration) chan bool {
 	return stop
 }
 
-func sqsNameToUrl(svc *sqs.SQS) {
-
-}
-
-
 func writeItem() {
 	// Initialize a session in us-west-2 that the SDK will use to load credentials
 	// from the shared config file. (~/.aws/credentials).
@@ -87,7 +82,6 @@ func writeItem() {
 	fmt.Println("Wrote 1 Message", *msgWritten.MessageId)
 }
 
-
 func readItem() []*sqs.Message {
 
 	sess, err := session.NewSession(&aws.Config{
@@ -125,7 +119,7 @@ func readItem() []*sqs.Message {
 		},
 		QueueUrl:            qURL,
 		MaxNumberOfMessages: aws.Int64(10),
-		VisibilityTimeout:   aws.Int64(20),  // 20 seconds
+		VisibilityTimeout:   aws.Int64(20), // 20 seconds
 		WaitTimeSeconds:     aws.Int64(0),
 	})
 
@@ -139,12 +133,11 @@ func readItem() []*sqs.Message {
 		return nil
 	} else {
 		fmt.Println("Received messages", len(msgRead.Messages))
-		fmt.Println(msgRead.Messages)
+		//fmt.Println(msgRead.Messages)
 	}
 
 	return msgRead.Messages
 }
-
 
 func deleteItem(receiptHandle *string) {
 	sess, err := session.NewSession(&aws.Config{
@@ -185,38 +178,58 @@ func deleteItem(receiptHandle *string) {
 		return
 	}
 
-	fmt.Println("Message Deleted", resultDelete)
+	resultDelete.GoString()
+	fmt.Println("Message Deleted for receipt", receiptHandle)
 }
 
 func main() {
+	//writeItem()
+	//message := readItem()[0]
+	//deleteItem(message.ReceiptHandle)
 
-	writeItem()
-	message := readItem()[0]
-	deleteItem(message.ReceiptHandle)
+	// A protype to startup and simulate:
+	// NotificationListener to write Q messages
+	// Compute servide to read Q messages and update computed values
+	//
 
+	notificationQueue := NewQueue("us-west-2", "media-notifications")
 
-	// Some Stuff
+	notificationListener := NotificationListener{NotificationQueue: notificationQueue}
+	notificationListener.Start()
 
-	//ping := func() { fmt.Println("#") }
+	computeService := ComputeService{notificationQueue: notificationQueue}
+	computeService.Start()
 
-	stop := schedule(doSomeWork, 2*time.Second)
-	time.Sleep(10 * time.Second)
-	stop <- true
-	time.Sleep(10 * time.Second)
+	time.Sleep(5 * time.Second)
 
+	//fmt.Println("Writing to and Read from SQS Queue...")
+	//// schedule writer and reader
+	//writeQueueItems := schedule(addSqsQueItem, 10*time.Millisecond)
+	//readQueueItems := schedule(processSqsItem, 2*time.Second)
+	//
+	//// Process for some time
+	//time.Sleep(5 * time.Second)
+	//// Stop processing
+	//fmt.Println("Shutting down...")
+	//writeQueueItems <- false
+	//readQueueItems <- false
+	//time.Sleep(3 * time.Second)
+	//
 	fmt.Println("Done")
 }
 
-
-func doSomeWork() {
-	fmt.Println("Doing some work")
+func addSqsQueItem() {
 	writeItem()
-	message := readItem()[0]
-	deleteItem(message.ReceiptHandle)
 }
 
-
-
+func processSqsItem() {
+	messages := readItem()
+	if messages != nil && len(messages) > 0 {
+		message := messages[0]
+		fmt.Println("Processed Message ", message.MessageId)
+		deleteItem(message.ReceiptHandle)
+	}
+}
 
 /*
 
@@ -228,4 +241,4 @@ ticker := time.NewTicker(500 * time.Millisecond)
     }()
 time.Sleep(1600 * time.Millisecond)
 ticker.Stop()
- */
+*/
