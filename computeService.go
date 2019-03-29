@@ -15,11 +15,12 @@ func New(notificationQueue SqsMessageQueue) ComputeService {
 
 func (cs *ComputeService) Start() {
 	// For this demo, just listen periodically since this is faking it
-
-	process := func() {
+	for {
+		// Pretend we received a notification and so, put one on the Queue
 		cs.processNotificationMessages()
+
+		time.After(1 * time.Second)
 	}
-	Schedule(process, 1*time.Second)
 }
 
 func (cs *ComputeService) processNotificationMessages() {

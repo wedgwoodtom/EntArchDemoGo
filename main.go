@@ -15,10 +15,10 @@ func main() {
 	notificationQueue := NewQueue("us-west-2", "media-notifications")
 
 	notificationListener := NotificationListener{NotificationQueue: notificationQueue}
-	notificationListener.Start()
+	go notificationListener.Start()
 
 	computeService := ComputeService{notificationQueue: notificationQueue}
-	computeService.Start()
+	go computeService.Start()
 
 	// Start web service
 	router := NewRouter()
