@@ -7,11 +7,11 @@ import (
 )
 
 type MediaNotification struct {
-	id           string
-	notification string
+	Id           string `json:"id"`
+	Notification string `json:"notification"`
 }
 
-func MakeRandondom() MediaNotification {
+func MakeRandomMedia() MediaNotification {
 	id := rand.Intn(math.MaxUint32)
 
 	message := `{
@@ -48,5 +48,5 @@ func MakeRandondom() MediaNotification {
     }
 `
 
-	return MediaNotification{id: strconv.Itoa(id), notification: message}
+	return MediaNotification{Id: strconv.Itoa(id), Notification: message}
 }

@@ -35,6 +35,8 @@ func (d *DynamoDb) PutItem(object interface{}, table string) {
 		os.Exit(1)
 	}
 
+	//fmt.Println("av ", av)
+
 	input := &dynamodb.PutItemInput{
 		Item:      av,
 		TableName: aws.String(table),
